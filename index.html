@@ -3,19 +3,763 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servinfancia SAS - Gestión de Abastecimiento</title>
+    <title>Guía AppSheet para Servinfancia SAS</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f9f9f9; }
-        h1 { color: #004d4d; }
-        p { font-size: 1.1em; color: #333; }
-        a { display: inline-block; padding: 12px 24px; background: #006666; color: white; text-decoration: none; border-radius: 5px; font-size: 1.2em; }
-        a:hover { background: #008080; }
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #4CAF50;
+            margin-top: 30px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .step {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #e9f5e9;
+            border-left: 4px solid #4CAF50;
+        }
+        .step strong {
+            color: #333;
+        }
+        .verification {
+            font-style: italic;
+            color: #555;
+            margin-top:5px;
+        }
+        .code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .example {
+            background-color: #f9f9f9;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
     </style>
-</head>
-<body>
-    <h1>Bienvenidos a Servinfancia SAS</h1>
-    <p>Somos una empresa dedicada a abastecer alimentos para el ICBF, apoyando la nutrición de niños y familias.</p>
-    <p>Accede a nuestra aplicación para gestionar refrigerios y raciones servidas:</p>
-    <a href="[URL_APPSHEET_PENDIENTE]">Iniciar Sesión o Crear Cuenta</a>
+</head><body>
+    <div class="container">
+        <h1>Guía AppSheet para Servinfancia SAS</h1>
+
+        <p>¡Bienvenido/a! Esta guía te ayudará a crear tu primera aplicación en AppSheet para Servinfancia SAS, paso a paso. ¡Imagina que es como construir con bloques digitales!</p>
+
+        <h2>Glosario: Entendiendo el Mundo AppSheet</h2>
+        <p>Aquí tienes un diccionario con palabras raras que usaremos. ¡No te asustes! Son más fáciles de lo que parecen.</p>
+        <ul>
+            <li>
+                <strong>AppSheet</strong>: Es una plataforma (como un taller de herramientas online) que te deja crear apps para celulares, tablets y computadoras sin necesidad de escribir código complicado. Es como si te dieran piezas de LEGO y tú las unes para hacer lo que quieras.
+            </li>
+            <li>
+                <strong>Google Sheets</strong>: Piensa en esto como tu cuaderno digital online, ¡pero más poderoso que Excel para trabajar en equipo! Aquí guardarás toda la información (datos) que tu app de AppSheet usará y mostrará. Es como la base de datos de tu app, pero en un formato de hojas de cálculo que ya conoces.
+            </li>
+            <li>
+                <strong>UX (User Experience - Experiencia de Usuario)</strong>: Suena técnico, ¿verdad? Pero solo significa qué tan fácil y agradable es para una persona usar tu aplicación. Una buena UX es como un juego bien diseñado: sabes dónde hacer clic y te diviertes usándolo. Queremos que usar tu app de Servinfancia sea ¡pan comido!
+            </li>
+            <li>
+                <strong>Views (Vistas)</strong>: Son las diferentes pantallas que tendrá tu app. Cada vista muestra la información de tus Google Sheets de una manera especial. Es como tener diferentes formas de ver tus cartas: todas juntas, en un calendario, en un mapa, etc. AppSheet tiene varios tipos:
+                <ul>
+                    <li><strong>Calendar (Calendario)</strong>: Muestra tus datos como en un calendario. Perfecto para ver fechas de entrega de alimentos o programación de rutas. Ejemplo: Ver en qué días hay entregas programadas.</li>
+                    <li><strong>Deck (Mazo)</strong>: Muestra la información como una serie de tarjetas resumidas, una debajo de la otra. Ideal para una vista rápida de pedidos o niños. Ejemplo: Una lista de niños con su nombre y grupo etario.</li>
+                    <li><strong>Table (Tabla)</strong>: Muestra los datos como una tabla, similar a como se ven en Google Sheets, con filas y columnas. Útil para ver mucha información detallada a la vez. Ejemplo: Una tabla con todos los detalles de los pedidos.</li>
+                    <li><strong>Gallery (Galería)</strong>: Muestra la información como una serie de tarjetas visuales, usualmente con imágenes. Si tuvieras fotos de los puntos de entrega, podrías usarla. Ejemplo: Mostrar fotos de los kits de alimentos (si las tuvieras).</li>
+                    <li><strong>Detail (Detalle)</strong>: Muestra toda la información de UN solo elemento (una fila de tu tabla). Por ejemplo, al hacer clic en un niño en una vista de "Deck", se abriría una vista de "Detail" con toda su información.</li>
+                    <li><strong>Map (Mapa)</strong>: Si tienes direcciones, esta vista las muestra en un mapa. ¡Genial para planificar las rutas de entrega! Ejemplo: Ver en un mapa dónde están todos los puntos de entrega.</li>
+                    <li><strong>Chart (Gráfico)</strong>: Muestra tus datos en forma de gráficos (barras, pastel, líneas). Muy útil para entender tendencias o resumir información. Ejemplo: Un gráfico de cuántos niños hay por grupo etario.</li>
+                    <li><strong>Dashboard (Tablero)</strong>: Es una pantalla especial que te permite mostrar varias vistas diferentes al mismo tiempo. Como el tablero de un carro, que te muestra la velocidad, la gasolina, etc., todo en un solo lugar. Ejemplo: Mostrar un mapa de rutas y una tabla de pedidos pendientes en la misma pantalla.</li>
+                    <li><strong>Form (Formulario)</strong>: Es la pantalla que usas para agregar nueva información o editar la existente. Como cuando llenas un formulario online para registrarte en algo. Ejemplo: Un formulario para registrar un nuevo niño o un nuevo pedido.</li>
+                    <li><strong>Card (Tarjeta)</strong>: Es un tipo de vista más nuevo y flexible que te permite diseñar cómo se muestra cada ítem de tus datos de forma muy personalizada, como si crearas pequeñas "tarjetas de presentación" para cada dato. Ejemplo: Tarjetas personalizadas para cada ruta mostrando el conductor, vehículo y número de entregas.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Columns (Columnas)</strong>: En tus Google Sheets (y por lo tanto en AppSheet), cada hoja tiene columnas. Cada columna guarda un tipo específico de información. Por ejemplo, en una hoja de "Niños", podrías tener columnas para "Nombre", "Fecha de Nacimiento", "Grupo Etario". En AppSheet, defines qué tipo de dato va en cada columna (texto, número, fecha, imagen, etc.).
+            </li>
+            <li>
+                <strong>Design View (Vista de Diseño)</strong>: Es el "taller" dentro de AppSheet donde construyes y personalizas tu app. Aquí eliges las vistas, configuras las columnas, creas acciones, etc. Es donde ocurre toda la magia.
+            </li>
+            <li>
+                <strong>Fórmulas</strong>: Son como las fórmulas que usas en Excel, pero adaptadas a AppSheet. Te permiten hacer cálculos, tomar decisiones lógicas (si pasa esto, haz aquello), o mostrar información específica. ¡Son súper poderosas!
+                <ul>
+                    <li><strong>NOW()</strong>: Es una fórmula que te da la fecha y hora EXACTA de este momento. Útil para saber cuándo se registró un pedido o cuándo se hizo una entrega. Ejemplo: En un formulario de entrega, puedes tener una columna que automáticamente se llena con `NOW()` cuando se marca como entregado.</li>
+                    <li><strong>USEREMAIL()</strong>: Esta fórmula te da el correo electrónico de la persona que está usando la app en ese momento (si inició sesión con Google). Sirve para saber quién hizo qué. Ejemplo: Registrar qué usuario marcó un pedido como "alistado".</li>
+                    <li><strong>LOOKUP()</strong>: Esta es como un detective. Le das un valor, le dices en qué tabla y columna buscar, y qué columna te tiene que devolver como resultado. Ejemplo: Si tienes el ID de un niño en la tabla de "Pedidos", puedes usar `LOOKUP()` para encontrar el nombre completo de ese niño en la tabla de "Niños". `LOOKUP([ID Niño], "Niños", "ID Niño", "Nombre Completo")` buscaría el `ID Niño` en la tabla "Niños" y devolvería el "Nombre Completo".</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Botones (Actions o Acciones)</strong>: Son elementos en tu app en los que los usuarios pueden hacer clic para que algo suceda. Por ejemplo, un botón para "Guardar", "Marcar como Entregado", "Actualizar Grupo Etario".
+            </li>
+            <li>
+                <strong>Configuraciones (Settings)</strong>: Son las opciones que ajustas en AppSheet para cambiar cómo se ve y funciona tu app. Desde el nombre de la app, el logo, hasta cosas más avanzadas.
+            </li>
+            <li>
+                <strong>Parámetros (Parameters)</strong>: A veces, en configuraciones o fórmulas avanzadas, puedes usar parámetros, que son como variables que puedes ajustar para cambiar el comportamiento sin modificar toda la lógica. (No te preocupes mucho por esto al inicio).
+            </li>
+            <li>
+                <strong>Tablas (Tables)</strong>: En AppSheet, cada hoja de tu Google Sheets se convierte en una "Tabla". Es la fuente de tus datos. Si tienes una hoja para "Niños" y otra para "Pedidos", tendrás dos tablas en AppSheet.
+            </li>
+            <li>
+                <strong>Slices (Rebanadas)</strong>: Imagina que tienes una tabla enorme de datos, pero solo quieres mostrar una pequeña parte de ella en una vista específica. Un "Slice" es como cortar una "rebanada" de tu tabla que cumple ciertos criterios. Ejemplo: Si tienes una tabla con todos los pedidos (entregados y pendientes), podrías crear un Slice llamado "Pedidos Pendientes" que solo muestre los que aún no se han entregado.
+            </li>
+            <li>
+                <strong>Acciones (Actions)</strong>: Son las tareas que tu app puede realizar, usualmente iniciadas por botones o eventos. Pueden ser cosas como agregar una nueva fila a una tabla, modificar datos existentes, navegar a otra vista, enviar un email, etc. Ejemplo: Una acción "Actualizar Estado a Entregado" que cambia el valor de una columna en la tabla de pedidos.
+            </li>
+            <li>
+                <strong>Eventos (Events)</strong>: Son cosas que suceden en tu app (como guardar un formulario, sincronizar datos) que pueden disparar Acciones automáticamente. Ejemplo: Un evento podría ser que "Cuando se guarde un nuevo pedido", automáticamente se envíe una notificación.
+            </li>
+            <li>
+                <strong>Autenticación (Authentication)</strong>: Es el proceso de verificar quién está usando la app. En nuestro caso, usaremos la autenticación con Google, lo que significa que los usuarios iniciarán sesión con su cuenta de Google. Esto ayuda a la seguridad y a saber quién hace qué.
+            </li>
+            <li>
+                <strong>Vistas Primarias (Primary Views)</strong>: Son las pantallas principales de tu app, las que aparecen en el menú principal (usualmente abajo o en un menú lateral). Son los puntos de entrada a las diferentes secciones de tu app.
+            </li>
+            <li>
+                <strong>Vistas de Referencia (Reference Views o Ref Views)</strong>: Son vistas que no aparecen en el menú principal, sino que se accede a ellas desde otras vistas. Por ejemplo, la vista de "Detalle" de un pedido es una vista de referencia, porque llegas a ella haciendo clic en un pedido desde una lista.
+            </li>
+            <li>
+                <strong>Sincronización (Sync)</strong>: Es el proceso mágico que mantiene tus datos actualizados entre la app en el celular/tablet/computadora y tu Google Sheet. Cuando alguien hace un cambio en la app, se sincroniza para que se guarde en el Google Sheet. Y si cambias algo directamente en el Google Sheet, la app se sincroniza para mostrar esos cambios. AppSheet lo hace automáticamente, pero a veces hay un botón para forzar la sincronización.
+            </li>
+            <li>
+                <strong>Modo Offline (Offline Mode)</strong>: AppSheet permite que tu app funcione incluso si no tienes internet en ese momento. Los usuarios pueden seguir viendo datos y agregando nueva información. Cuando la app vuelve a tener conexión, sincroniza todos los cambios. ¡Muy útil para entregas en zonas sin buena señal!
+            </li>
+            <li>
+                <strong>Permisos (Permissions)</strong>: Definen qué pueden hacer los usuarios en tu app. ¿Pueden agregar datos? ¿Solo verlos? ¿Editar? ¿Borrar? Esto se configura en AppSheet, a menudo ligado a los roles.
+            </li>
+            <li>
+                <strong>Roles (Roles)</strong>: Puedes definir diferentes tipos de usuarios (roles), como "Administrador" o "Repartidor". Cada rol puede tener diferentes permisos. Por ejemplo, un "Administrador" podría ver y editar todo, mientras que un "Repartidor" solo podría ver sus rutas y marcar pedidos como entregados. (Esto es más avanzado, pero bueno que lo sepas).
+            </li>
+            <li>
+                <strong>View Options (Opciones de Vista)</strong>: Cada tipo de vista (Tabla, Deck, Calendario, etc.) tiene sus propias opciones para personalizarla:
+                <ul>
+                    <li><strong>Sort by (Ordenar por)</strong>: Te permite elegir en qué columna y en qué orden (ascendente o descendente) se mostrarán los datos. Ejemplo: Ordenar los pedidos por fecha de entrega, del más nuevo al más viejo.</li>
+                    <li><strong>Group by (Agrupar por)</strong>: Te permite agrupar filas que tienen el mismo valor en una columna específica. Ejemplo: Agrupar pedidos por "Estado" (Pendiente, En Ruta, Entregado).</li>
+                    <li><strong>Group aggregate (Agregado de grupo)</strong>: Cuando agrupas datos, puedes hacer cálculos dentro de cada grupo, como contar cuántos ítems hay (Count), sumar valores (Sum), encontrar el promedio (Average), etc. Ejemplo: Si agrupas pedidos por "Estado", puedes mostrar cuántos pedidos hay en cada estado.</li>
+                    <li><strong>Use tabs in mobile view (Usar pestañas en vista móvil)</strong>: Para vistas de Dashboard, esta opción permite que las diferentes vistas dentro del dashboard se muestren como pestañas en celulares, para ahorrar espacio.</li>
+                    <li><strong>Interactive mode (Modo Interactivo)</strong>: Para vistas de Dashboard, si está activado, cuando seleccionas algo en una vista del dashboard, puede filtrar o afectar lo que se muestra en otras vistas del mismo dashboard. ¡Muy dinámico!</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>Plan de Acción: ¡Nuestro Mapa del Tesoro para la App!</h2>
+        <p>Este es nuestro plan general. ¡No te preocupes si parece mucho, iremos paso a paso!</p>
+        <ol>
+            <li><strong>Etapa 1: ¡Creando Nuestro Cuaderno Digital y la Puerta de Entrada!</strong>
+                <ul>
+                    <li>Qué haremos: Vamos a crear el archivo de Google Sheets donde vivirá toda nuestra información. Luego, conectaremos este cuaderno a AppSheet y haremos la primera pantalla de bienvenida con inicio de sesión de Google. ¡Será como poner el letrero de "Bienvenidos a Servinfancia" en nuestra app!</li>
+                </ul>
+            </li>
+            <li><strong>Etapa 2: ¡Organizando a los Peques! (Gestión de Grupos Etarios)</strong>
+                <ul>
+                    <li>Qué haremos: Añadiremos una sección para registrar a los niños y niñas, y una forma de actualizar sus grupos etarios automáticamente o con un botón. Esto es como tu macro de Excel para grupos etarios, ¡pero ahora en la app!</li>
+                </ul>
+            </li>
+            <li><strong>Etapa 3: ¡A Preparar los Pedidos! (Programación de Alistamiento)</strong>
+                <ul>
+                    <li>Qué haremos: Crearemos una parte en la app para registrar los pedidos de alimentos, ver qué se necesita y marcar cuándo están listos para ser enviados. ¡Adiós a los enredos del archivo único!</li>
+                </ul>
+            </li>
+            <li><strong>Etapa 4: ¡Rutas en Marcha! (Despacho de Rutas)</strong>
+                <ul>
+                    <li>Qué haremos: Montaremos la funcionalidad para asignar pedidos a rutas, ver las rutas en un mapa (¡si tenemos direcciones!) y marcar cuándo se han entregado los alimentos. Los repartidores podrán actualizar el estado desde su celular.</li>
+                </ul>
+            </li>
+            <li><strong>Etapa 5: ¡Poniéndola Bonita y Poderosa! (Mejoras y Extras)</strong>
+                <ul>
+                    <li>Qué haremos: Una vez que lo básico funcione, podemos añadir gráficos para ver estadísticas, mejorar cómo se ve la app, configurar notificaciones (quizás un aviso cuando un pedido está listo), y definir permisos si diferentes personas necesitan ver cosas distintas.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2>Paso a Paso: ¡Construyendo Nuestra App Bloque por Bloque!</h2>
+
+        <h3>Etapa 1: ¡Creando Nuestro Cuaderno Digital y la Puerta de Entrada!</h3>
+        <p>En esta primera etapa, sentaremos las bases: nuestro archivo de Google Sheets y la primera pantalla de nuestra app.</p>
+
+        <div class="step">
+            <strong>Paso 1.1: Crear el Libro de Google Sheets (Nuestro Cuaderno Digital)</strong>
+            <ul>
+                <li><strong>Acción:</strong> Abre tu navegador web (Chrome, Firefox, etc.) y ve a <a href="https://sheets.google.com" target="_blank">sheets.google.com</a>. Si no has iniciado sesión en Google, te pedirá que lo hagas.</li>
+                <li><strong>Qué hace:</strong> Te lleva a la página principal de Google Sheets.</li>
+                <li><strong>Para qué sirve:</strong> Desde aquí podemos crear nuestro nuevo "cuaderno".</li>
+                <li><strong>Verificación:</strong> Verás una página con la opción de crear una "Hoja de cálculo en blanco" (suele ser un gran signo "+" de colores).</li>
+            </ul>
+        </div>
+        <div class="step">
+            <strong>Paso 1.2: Iniciar una Nueva Hoja de Cálculo</strong>
+            <ul>
+                <li><strong>Acción:</strong> Haz clic en "Hoja de cálculo en blanco" o el signo "+".</li>
+                <li><strong>Qué hace:</strong> Crea un nuevo archivo de Google Sheets sin título.</li>
+                <li><strong>Para qué sirve:</strong> Este será el archivo principal donde guardaremos TODOS los datos de nuestra app Servinfancia.</li>
+                <li><strong>Verificación:</strong> Se abrirá una nueva hoja de cálculo vacía, con "Hoja de cálculo sin título" en la parte superior izquierda.</li>
+            </ul>
+        </div>
+        <div class="step">
+            <strong>Paso 1.3: Ponerle Nombre a Nuestro Cuaderno Digital</strong>
+            <ul>
+                <li><strong>Acción:</strong> Haz clic donde dice "Hoja de cálculo sin título" en la parte superior izquierda. Escribe un nombre descriptivo, por ejemplo: <code class="code">DatosAppServinfancia</code>. Presiona Enter.</li>
+                <li><strong>Qué hace:</strong> Le da un nombre a tu archivo de Google Sheets.</li>
+                <li><strong>Para qué sirve:</strong> Para que sea fácil de encontrar y saber qué contiene.</li>
+                <li><strong>Verificación:</strong> El nombre en la parte superior izquierda cambiará a <code class="code">DatosAppServinfancia</code>.</li>
+            </ul>
+        </div>
+        <div class="step">
+            <strong>Paso 1.4: Crear la Primera Hoja para la Bienvenida (Opcional, pero buena práctica)</strong>
+            <p>Aunque AppSheet puede crear vistas sin una tabla de datos específica para una simple bienvenida, tener una hoja de control o configuración puede ser útil más adelante. Por ahora, solo la crearemos, pero no es estrictamente necesaria para una pantalla de bienvenida sin botones o datos dinámicos.</p>
+            <p>Podemos decidir más adelante si necesitamos datos específicos para la bienvenida. Por ahora, la pantalla de bienvenida será estática, configurada directamente en AppSheet.</p>
+            <ul>
+                <li><strong>Acción:</strong> En la parte inferior de la hoja de Google Sheets, verás una pestaña que dice "Hoja1". Haz clic derecho sobre ella (o en la flechita) y selecciona "Cambiar nombre". Escribe <code class="code">ConfiguracionApp</code> y presiona Enter.</li>
+                <li><strong>Qué hace:</strong> Renombra la primera hoja de cálculo.</li>
+                <li><strong>Para qué sirve:</strong> Para tener un lugar donde poner ajustes generales de la app si los necesitamos más adelante. Por ahora, puede estar vacía o tener una columna simple como "Version" con el valor "1.0". (Esto es opcional).</li>
+                <li><strong>Verificación:</strong> La pestaña inferior ahora dice <code class="code">ConfiguracionApp</code>.</li>
+            </ul>
+            <div class="example">
+                <strong>Ejemplo de la hoja <code class="code">ConfiguracionApp</code> (Opcional por ahora):</strong>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ajuste (Columna A)</th>
+                            <th>Valor (Columna B)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MensajeBienvenida</td>
+                            <td>Seleccione una opción para gestionar pedidos</td>
+                        </tr>
+                        <tr>
+                            <td>VersionApp</td>
+                            <td>1.0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><em>Nota: Para la bienvenida que nos piden (solo título y mensaje, sin botones), AppSheet puede mostrar esto sin necesidad de leerlo desde esta tabla. Pero tenerla es una buena práctica para textos que podrías querer cambiar después sin tocar la estructura de la app. Por ahora, la crearemos pero no la usaremos para la bienvenida inicial.</em></p>
+            </div>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.5: ¡Hora de Conocer AppSheet! Ir a AppSheet.com</strong>
+            <ul>
+                <li><strong>Acción:</strong> Abre una nueva pestaña en tu navegador y ve a <a href="https://www.appsheet.com" target="_blank">www.appsheet.com</a>.</li>
+                <li><strong>Qué hace:</strong> Te lleva a la página principal de AppSheet.</li>
+                <li><strong>Para qué sirve:</strong> Desde aquí crearemos nuestra nueva aplicación.</li>
+                <li><strong>Verificación:</strong> Verás la página de inicio de AppSheet. Busca un botón que diga "Start for free" o "Crear una aplicación".</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.6: Iniciar la Creación de la App y Conectar con Google Sheets</strong>
+            <ul>
+                <li><strong>Acción:</strong> Haz clic en "Start for free" o similar. AppSheet te pedirá que inicies sesión con tu proveedor de datos (Google, Microsoft, etc.). Elige "Google" (o la cuenta con la que creaste el Google Sheet).</li>
+                <li><strong>Qué hace:</strong> Inicia el proceso para crear una nueva app y te conecta con tu cuenta de Google para que AppSheet pueda acceder a tus archivos de Google Sheets.</li>
+                <li><strong>Para qué sirve:</strong> Es el primer paso para que AppSheet sepa dónde están tus datos.</li>
+                <li><strong>Verificación:</strong> Deberías ver una pantalla de bienvenida de AppSheet o una opción para "Make a new app" (Crear una nueva app) o "Start with your own data" (Empezar con tus propios datos).</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.7: Elegir "Start with your own data" (Empezar con tus propios datos)</strong>
+            <ul>
+                <li><strong>Acción:</strong> Haz clic en la opción "Start with your own data".
+                    <ul>
+                        <li>Dale un nombre a tu app, por ejemplo: <code class="code">ServinfanciaApp</code>.</li>
+                        <li>Elige una categoría, por ejemplo: <code class="code">Operations and Field Service</code> o <code class="code">Education</code>. (Esto es solo para organización).</li>
+                        <li>Haz clic en "Choose your data" (Elige tus datos).</li>
+                    </ul>
+                </li>
+                <li><strong>Qué hace:</strong> Le dice a AppSheet que quieres usar un archivo de datos que ya tienes (nuestro Google Sheet).</li>
+                <li><strong>Para qué sirve:</strong> Para conectar tu app al archivo <code class="code">DatosAppServinfancia</code> que creamos.</li>
+                <li><strong>Verificación:</strong> Se abrirá un selector de archivos de Google Drive.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.8: Seleccionar Nuestro Google Sheet</strong>
+            <ul>
+                <li><strong>Acción:</strong> En el selector de archivos, busca y selecciona el archivo <code class="code">DatosAppServinfancia.xlsx</code> (o como lo hayas nombrado). Haz clic en "Select".</li>
+                <li><strong>Qué hace:</strong> Le dice a AppSheet exactamente qué archivo de Google Sheets usar.</li>
+                <li><strong>Para qué sirve:</strong> AppSheet ahora leerá las hojas de este archivo como tablas para tu app.</li>
+                <li><strong>Verificación:</strong> AppSheet empezará a "pensar" y procesar tu archivo. Puede que te muestre una vista previa de tu app con alguna tabla que haya encontrado (si la hoja <code class="code">ConfiguracionApp</code> tenía datos, podría intentar crear una vista para ella). ¡No te preocupes por lo que aparezca aún! Serás redirigido al editor de AppSheet.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.9: Configurar la Autenticación (Inicio de Sesión con Google)</strong>
+            <p>AppSheet, por defecto, cuando creas una app e indicas que usarás Google Sheets, suele configurar la autenticación con Google automáticamente si tu cuenta es de Google. Vamos a verificarlo y asegurarnos.</p>
+            <ul>
+                <li><strong>Acción:</strong> En el editor de AppSheet, busca en el menú de la izquierda la sección <code class="code">Security</code> (Seguridad). Haz clic en ella.
+                Luego, haz clic en <code class="code">Require Sign-In</code> (Requerir inicio de sesión).</li>
+                <li><strong>Qué hace:</strong> Te lleva a las configuraciones de seguridad de tu app.</li>
+                <li><strong>Para qué sirve:</strong> Aquí nos aseguramos de que la gente necesite una cuenta de Google para usar la app.</li>
+                <li><strong>Verificación:</strong>
+                    <ul>
+                        <li>La opción "Require user signin?" (¿Requerir inicio de sesión del usuario?) debería estar <strong>Activada</strong> (ON).</li>
+                        <li>Debajo, en "Authentication provider" (Proveedor de autenticación), debería estar seleccionado "Google" (o el que usaste). Si no, cámbialo a Google.</li>
+                        <li>Guarda los cambios si hiciste alguno (suele haber un botón "Save" en la parte superior derecha del editor de AppSheet).</li>
+                    </ul>
+                </li>
+            </ul>
+            <p><em>Importante: Al principio, mientras desarrollas, puede que quieras añadir tu propio email como usuario de prueba en la sección <code class="code">Users</code> (Usuarios) dentro de <code class="code">Security</code>, para poder probar la app. Cuando la compartas, podrás gestionar quién más puede usarla.</em></p>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.10: Crear la Pantalla de Bienvenida (Vista)</strong>
+            <p>Ahora vamos a crear esa primera pantalla que verán los usuarios después de iniciar sesión.</p>
+            <ul>
+                <li><strong>Acción:</strong> En el menú de la izquierda del editor de AppSheet, ve a <code class="code">UX</code> (Experiencia de Usuario) o <code class="code">Views</code> (Vistas).</li>
+                <li><strong>Qué hace:</strong> Te muestra las diferentes pantallas (vistas) de tu app y te permite crear nuevas.</li>
+                <li><strong>Para qué sirve:</strong> Para diseñar cómo se ve y se navega tu app.</li>
+                <li><strong>Verificación:</strong> Verás una lista de las "Primary Views" (Vistas Primarias). Si AppSheet creó alguna vista automáticamente a partir de tu hoja <code class="code">ConfiguracionApp</code>, podrías verla aquí. Podemos borrarla o modificarla.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.11: Añadir una Nueva Vista para la Bienvenida</strong>
+            <ul>
+                <li><strong>Acción:</strong>
+                    <ol>
+                        <li>Si hay vistas existentes que no quieres, puedes pasar el mouse sobre ellas y hacer clic en el ícono de bote de basura para eliminarlas (con cuidado).</li>
+                        <li>Haz clic en <code class="code">+ New View</code> (Nueva Vista) o un botón similar para agregar una pantalla.</li>
+                        <li>En el panel de la derecha que aparece para configurar la nueva vista:
+                            <ul>
+                                <li><strong>For this data (Para estos datos)</strong>: Aquí es donde normalmente seleccionas una tabla. Para una vista de bienvenida simple que no muestra datos de una tabla, puedes seleccionar "None (creates a read-only view)" o, si creaste la hoja <code class="code">ConfiguracionApp</code> y quieres usarla para el mensaje (más avanzado), la seleccionarías aquí. Por ahora, si no hay "None", puedes seleccionar temporalmente <code class="code">ConfiguracionApp</code> (si la creaste y AppSheet la importó como tabla) o cualquier tabla que AppSheet haya podido crear. Lo importante es que el tipo de vista sea "Detail" y la configuremos para que no muestre columnas.</li>
+                                <li><strong>View name (Nombre de la vista)</strong>: Escribe <code class="code">Bienvenida</code>. Este es el nombre que verás en el editor y podría aparecer en el menú si es una vista primaria.</li>
+                                <li><strong>View type (Tipo de vista)</strong>: Selecciona <code class="code">Detail</code> (Detalle). Las vistas de detalle son buenas para mostrar información sobre un solo "algo". En este caso, será nuestra "pantalla de bienvenida".</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+                <li><strong>Qué hace:</strong> Crea una nueva pantalla en tu app. La vista de "Detail" normalmente muestra los detalles de una fila de una tabla. La usaremos de forma un poco diferente aquí para nuestra bienvenida estática.</li>
+                <li><strong>Para qué sirve:</strong> Esta será nuestra pantalla de inicio.</li>
+                <li><strong>Verificación:</strong> Deberías ver <code class="code">Bienvenida</code> en tu lista de vistas y una vista previa de la pantalla en el emulador de la derecha. Aún no se verá como queremos.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.12: Configurar la Vista de Bienvenida (Título y Mensaje)</strong>
+            <ul>
+                <li><strong>Acción:</strong> Con la vista <code class="code">Bienvenida</code> seleccionada, busca las siguientes opciones en el panel de configuración de la vista (a la derecha):
+                    <ul>
+                        <li><strong>View Options (Opciones de Vista)</strong> o <strong>Display (Mostrar)</strong>:
+                            <ul>
+                                <li><strong>Title (Título)</strong>: Aquí puedes intentar poner "Bienvenidos a Servinfancia". Sin embargo, el "Title" de la vista a veces se comporta más como el nombre de la pestaña. La forma más robusta de poner un gran encabezado es usando una columna (ver paso siguiente si esto no da el resultado deseado).</li>
+                                <li><strong>Show column headers (Mostrar encabezados de columna)</strong>: Asegúrate de que esté <strong>Desactivado</strong> (OFF), ya que no queremos mostrar nombres de columnas.</li>
+                                <li><strong>Column order (Orden de las columnas)</strong>: Si seleccionaste una tabla (como <code class="code">ConfiguracionApp</code>), esta sección te permite elegir qué columnas mostrar. ¡Queremos que esté vacía o que no muestre ninguna columna real de datos!</li>
+                            </ul>
+                        </li>
+                        <li>Para el mensaje principal y el título, una forma común de hacerlo en una vista "Detail" es crear "Virtual Columns" (Columnas Virtuales) en la tabla asociada a la vista (si usaste una) o usar las capacidades de "Show If" de los elementos de la vista.
+                        <br><strong>Una forma más directa para un mensaje de bienvenida estático usando una vista "Detail" sin datos de tabla es un poco un truco, o mejor, usar una vista tipo "Card" o "Dashboard" vacía con un texto.</strong>
+
+                        <br><strong>Alternativa más simple para el mensaje estático usando "Detail View" con una tabla de apoyo (como <code class="code">ConfiguracionApp</code>):</strong>
+                        <ol>
+                            <li>Asegúrate que tu hoja <code class="code">ConfiguracionApp</code> tenga al menos una fila y dos columnas, por ejemplo:
+                                <table>
+                                    <thead><tr><th>ID_Dummy</th><th>Mensaje_Pantalla</th></tr></thead>
+                                    <tbody><tr><td>1</td><td>Bienvenidos a Servinfancia</td></tr></tbody>
+                                </table>
+                                (Y otra columna para el segundo mensaje si es necesario).
+                                <br><em>Importante: Ve a AppSheet, en <code class="code">Data</code> > <code class="code">Tables</code>, selecciona la tabla <code class="code">ConfiguracionApp</code> y haz clic en "Regenerate Structure" para que AppSheet vea las nuevas columnas.</em>
+                            </li>
+                            <li>Vuelve a la configuración de tu vista <code class="code">Bienvenida</code> (UX > Views > Bienvenida).
+                                <ul>
+                                    <li>Asegúrate que "For this data" sea <code class="code">ConfiguracionApp</code>.</li>
+                                    <li>En "Column order", añade solo la columna <code class="code">Mensaje_Pantalla</code>.</li>
+                                    <li>En "Display mode" o "Main image / Header / Text body", busca cómo asignar columnas a estas áreas. Para una vista "Detail", las columnas en "Column order" se muestran una debajo de la otra.</li>
+                                    <li>Para el título "Bienvenidos a Servinfancia", podrías tenerlo como el primer valor de la primera columna visible.</li>
+                                    <li>Para el mensaje "Seleccione una opción para gestionar pedidos", podrías usar una columna de tipo "Show" (Mostrar) con la categoría "Text" (Texto) y en su contenido (Content) escribir directamente el mensaje. Para esto:
+                                        <ol>
+                                            <li>Ve a <code class="code">Data</code> > <code class="code">Columns</code> y selecciona la tabla <code class="code">ConfiguracionApp</code>.</li>
+                                            <li>Añade una Columna Virtual (haz clic en "Add Virtual Column").
+                                                <ul>
+                                                    <li><strong>Column Name:</strong> <code class="code">TituloBienvenida</code></li>
+                                                    <li><strong>App Formula:</strong> <code class="code">"Bienvenidos a Servinfancia"</code> (¡con las comillas!)</li>
+                                                    <li><strong>Type:</strong> <code class="code">Show</code></li>
+                                                    <li>En las opciones de la columna "Show", ponle de <strong>Category</strong> <code class="code">Header</code> o <code class="code">Section Header</code>.</li>
+                                                    <li>En <strong>Content</strong> o <strong>Value</strong> para esta columna Show, pon <code class="code">"Bienvenidos a Servinfancia"</code>. (A veces la fórmula ya es suficiente).</li>
+                                                </ul>
+                                            </li>
+                                            <li>Añade otra Columna Virtual:
+                                                <ul>
+                                                    <li><strong>Column Name:</strong> <code class="code">MensajeSeleccion</code></li>
+                                                    <li><strong>App Formula:</strong> <code class="code">"Seleccione una opción para gestionar pedidos"</code></li>
+                                                    <li><strong>Type:</strong> <code class="code">Show</code></li>
+                                                    <li><strong>Category:</strong> <code class="code">Text</code></li>
+                                                    <li><strong>Content:</strong> <code class="code">"Seleccione una opción para gestionar pedidos"</code></li>
+                                                </ul>
+                                            </li>
+                                            <li>Guarda los cambios de las columnas.</li>
+                                        </ol>
+                                    </li>
+                                    <li>Ahora, en la configuración de tu vista <code class="code">Bienvenida</code> (UX > Views), en "Column order", añade primero <code class="code">TituloBienvenida</code> y luego <code class="code">MensajeSeleccion</code>. Asegúrate que no haya otras columnas.</li>
+                                    <li>Asegúrate que en "View Options", la opción "Show column headers" esté <strong>DESACTIVADA</strong>.</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        </li>
+                </ul>
+                <li><strong>Qué hace:</strong> Configura cómo se ve tu pantalla de bienvenida. Las columnas virtuales de tipo "Show" son perfectas para mostrar texto fijo, encabezados o imágenes.</li>
+                <li><strong>Para qué sirve:</strong> Para que la pantalla muestre "Bienvenidos a Servinfancia" y "Seleccione una opción para gestionar pedidos", sin nada más por ahora.</li>
+                <li><strong>Verificación:</strong> En la vista previa de la app (el emulador a la derecha), deberías ver el título "Bienvenidos a Servinfancia" y debajo el mensaje "Seleccione una opción para gestionar pedidos". No deberían aparecer botones de acción ni otros datos.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 1.13: Asegurar que la Bienvenida sea la Primera Vista</strong>
+            <ul>
+                <li><strong>Acción:</strong> En <code class="code">UX</code> > <code class="code">Views</code>, mira el orden de las "Primary Views". La primera de la lista (la de más arriba) es la que se muestra por defecto al abrir la app después del login. Puedes arrastrar la vista <code class="code">Bienvenida</code> para que quede en la primera posición si no lo está.</li>
+                <li><strong>Qué hace:</strong> Define qué pantalla se carga primero.</li>
+                <li><strong>Para qué sirve:</strong> Para que los usuarios siempre vean la bienvenida al entrar.</li>
+                <li><strong>Verificación:</strong> La vista <code class="code">Bienvenida</code> está en la parte superior de la lista de "Primary Views" (o en la posición "Leftmost" si es una vista de menú). Al refrescar la vista previa (suele haber un botón de refresco o se actualiza sola), debería mostrarse tu pantalla de bienvenida.</li>
+            </ul>
+        </div>
+        <div class="step">
+            <strong>Paso 1.14: ¡Guardar tu Progreso!</strong>
+            <ul>
+                <li><strong>Acción:</strong> En la parte superior derecha del editor de AppSheet, hay un botón que dice <code class="code">Save</code> (Guardar), a veces con un ícono de disquete. ¡Haz clic en él!</li>
+                <li><strong>Qué hace:</strong> Guarda todos los cambios que has hecho en tu app.</li>
+                <li><strong>Para qué sirve:</strong> Para no perder tu trabajo. AppSheet a veces guarda automáticamente, pero es buena costumbre guardar manualmente después de cambios importantes.</li>
+                <li><strong>Verificación:</strong> El botón de guardar puede mostrar un mensaje de "Saved" o cambiar su apariencia brevemente.</li>
+            </ul>
+        </div>
+
+        <p>¡Felicidades! Acabas de crear la base de tu Google Sheet, conectarlo a AppSheet, configurar el inicio de sesión con Google y diseñar tu primera pantalla de bienvenida. ¡Ya eres un creador de apps!</p>
+        <p>En la próxima etapa, empezaremos a añadir la funcionalidad para los grupos etarios.</p>
+
+        <h2>Etapa 2: ¡Organizando a los Peques! (Gestión de Grupos Etarios)</h2>
+        <p>Ahora vamos a crear la parte de la app para manejar la información de los niños y sus grupos de edad. Esto es como digitalizar y mejorar tu macro de Excel.</p>
+
+        <div class="step">
+            <strong>Paso 2.1: Crear una Nueva Hoja en Google Sheets para "Niños"</strong>
+            <ul>
+                <li><strong>Acción:</strong>
+                    <ol>
+                        <li>Ve a tu archivo de Google Sheets: <code class="code">DatosAppServinfancia</code>.</li>
+                        <li>En la parte inferior, haz clic en el signo "+" para añadir una nueva hoja.</li>
+                        <li>Haz clic derecho en la nueva pestaña de hoja (ej. "Hoja2") y selecciona "Cambiar nombre". Nómbrala <code class="code">Ninos</code>. (Usa nombres simples, sin espacios ni caracteres especiales para las hojas que serán tablas en AppSheet).</li>
+                    </ol>
+                </li>
+                <li><strong>Qué hace:</strong> Crea un nuevo espacio en tu cuaderno digital dedicado a la información de los niños.</li>
+                <li><strong>Para qué sirve:</strong> Aquí guardaremos todos los datos de cada niño, como su nombre, fecha de nacimiento, etc.</li>
+                <li><strong>Verificación:</strong> Tienes una nueva hoja llamada <code class="code">Ninos</code> en tu Google Sheet.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 2.2: Definir las Columnas para la Hoja "Ninos"</strong>
+            <ul>
+                <li><strong>Acción:</strong> En la primera fila de tu hoja <code class="code">Ninos</code>, escribe los siguientes encabezados de columna, cada uno en una celda separada (Fila 1):
+                    <ul>
+                        <li>Celda A1: <code class="code">ID_Nino</code> (Identificador único para cada niño)</li>
+                        <li>Celda B1: <code class="code">NombreCompleto</code></li>
+                        <li>Celda C1: <code class="code">FechaNacimiento</code></li>
+                        <li>Celda D1: <code class="code">EdadMeses</code> (La calcularemos con una fórmula en AppSheet)</li>
+                        <li>Celda E1: <code class="code">GrupoEtarioActual</code> (Lo calcularemos o actualizaremos)</li>
+                        <li>Celda F1: <code class="code">FechaUltimaActualizacionGE</code> (Fecha de cuándo se actualizó el grupo etario)</li>
+                        <li>Celda G1: <code class="code">Responsable</code> (Email del usuario que hizo el último cambio, opcional)</li>
+                        <li>Celda H1: <code class="code">Notas</code> (Para cualquier observación)</li>
+                    </ul>
+                </li>
+                <li><strong>Qué hace:</strong> Establece la estructura de la información que guardaremos para cada niño.</li>
+                <li><strong>Para qué sirve:</strong> Cada columna representa un dato específico del niño. Es MUY importante que la primera fila contenga estos nombres de columna y que sean únicos y descriptivos.</li>
+                <li><strong>Verificación:</strong> La primera fila de tu hoja <code class="code">Ninos</code> tiene estos encabezados.</li>
+            </ul>
+            <div class="example">
+                <strong>Así se verá tu hoja <code class="code">Ninos</code> (solo encabezados por ahora):</strong>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID_Nino</th>
+                            <th>NombreCompleto</th>
+                            <th>FechaNacimiento</th>
+                            <th>EdadMeses</th>
+                            <th>GrupoEtarioActual</th>
+                            <th>FechaUltimaActualizacionGE</th>
+                            <th>Responsable</th>
+                            <th>Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><em>(Ej: N001)</em></td>
+                            <td><em>(Ej: Ana Perez)</em></td>
+                            <td><em>(Ej: 15/03/2022)</em></td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="step">
+            <strong>Paso 2.3: Añadir la Nueva Tabla "Ninos" a AppSheet</strong>
+            <ul>
+                <li><strong>Acción:</strong>
+                    <ol>
+                        <li>Regresa a la ventana de tu navegador donde tienes abierto el editor de AppSheet para tu <code class="code">ServinfanciaApp</code>.</li>
+                        <li>En el menú de la izquierda, ve a <code class="code">Data</code> (Datos) y luego a <code class="code">Tables</code> (Tablas).</li>
+                        <li>Haz clic en <code class="code">+ New Table</code> (Nueva Tabla) o <code class="code">+ Add Table</code>.</li>
+                        <li>AppSheet te preguntará dónde están los datos. Debería mostrarte tu Google Sheet <code class="code">DatosAppServinfancia</code>. Selecciónalo si es necesario.</li>
+                        <li>Luego te mostrará las hojas disponibles en ese archivo que aún no han sido añadidas como tablas. Selecciona la hoja <code class="code">Ninos</code>.</li>
+                        <li>Haz clic en "Add This Table" (Añadir esta tabla) o similar.</li>
+                    </ol>
+                </li>
+                <li><strong>Qué hace:</strong> Conecta la hoja <code class="code">Ninos</code> de tu Google Sheet a tu app de AppSheet, convirtiéndola en una "tabla" dentro de la app.</li>
+                <li><strong>Para qué sirve:</strong> Para que AppSheet pueda leer, mostrar y permitirte modificar los datos de los niños.</li>
+                <li><strong>Verificación:</strong> La tabla <code class="code">Ninos</code> aparecerá en tu lista de tablas en AppSheet (Data > Tables). AppSheet intentará adivinar el tipo de cada columna.</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 2.4: Configurar los Tipos de Columna para la Tabla "Ninos"</strong>
+            <p>AppSheet es inteligente, pero a veces necesita que le ayudemos a entender qué tipo de información va en cada columna. Esto es CRUCIAL.</p>
+            <ul>
+                <li><strong>Acción:</strong>
+                    <ol>
+                        <li>En AppSheet, ve a <code class="code">Data</code> > <code class="code">Columns</code>.</li>
+                        <li>En el desplegable "Select a table", elige la tabla <code class="code">Ninos</code>.</li>
+                        <li>Verás la lista de columnas que creaste. Revisa y ajusta la columna "TYPE" (Tipo) para cada una:
+                            <ul>
+                                <li><strong>ID_Nino</strong>: Tipo <code class="code">Text</code>. Marca la casilla "KEY?" (¿Es llave?). Esto le dice a AppSheet que esta columna tiene un valor único para cada niño, ¡súper importante!
+                                    <ul>
+                                        <li>Opcional: En "Initial value" (Valor inicial) puedes poner la fórmula <code class="code">UNIQUEID()</code>. Esto hará que AppSheet genere un código único cada vez que agregues un nuevo niño.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>NombreCompleto</strong>: Tipo <code class="code">Name</code> (Nombre) o <code class="code">Text</code>.</li>
+                                <li><strong>FechaNacimiento</strong>: Tipo <code class="code">Date</code> (Fecha).</li>
+                                <li><strong>EdadMeses</strong>: Tipo <code class="code">Number</code> (Número).
+                                    <ul>
+                                        <li>Aquí pondremos una fórmula para que se calcule sola. Haz clic en el lápiz para editar esta columna.</li>
+                                        <li>Busca el campo "Formula" o "App Formula".</li>
+                                        <li>Escribe la siguiente fórmula (¡con cuidado!):
+                                            <br><code class="code">FLOOR((TODAY() - [FechaNacimiento]) / 30.4375)</code>
+                                            <br><em>Explicación de la fórmula: <code class="code">TODAY()</code> es la fecha de hoy. Le restamos la <code class="code">[FechaNacimiento]</code>, lo que da el número de días. Dividimos por 30.4375 (promedio de días en un mes) para obtener meses. <code class="code">FLOOR()</code> redondea hacia abajo al número entero más cercano.</em></li>
+                                        <li>Marca la casilla "Editable?" (¿Editable?) para esta columna como <strong>DESMARCADA</strong> (o busca "Editable if" y pon la condición <code class="code">FALSE</code>). No queremos que la gente edite esto manualmente.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>GrupoEtarioActual</strong>: Tipo <code class="code">Text</code> (o podrías usar <code class="code">Enum</code> si tienes una lista fija de grupos etarios. Por ahora, <code class="code">Text</code> está bien).
+                                    <ul>
+                                        <li>También le pondremos una fórmula. Edita la columna.</li>
+                                        <li>En "App Formula", podrías empezar con algo simple o dejarlo para una acción de actualización. Para que se calcule automáticamente basado en <code class="code">EdadMeses</code> (simplificado, necesitarás definir tus rangos):
+                                            <code class="code">IFS(
+    AND([EdadMeses] >= 0, [EdadMeses] <= 5), "0-5 Meses",
+    AND([EdadMeses] >= 6, [EdadMeses] <= 11), "6-11 Meses",
+    AND([EdadMeses] >= 12, [EdadMeses] <= 23), "12-23 Meses (1 año)",
+    AND([EdadMeses] >= 24, [EdadMeses] <= 35), "24-35 Meses (2 años)",
+    AND([EdadMeses] >= 36, [EdadMeses] <= 47), "36-47 Meses (3 años)",
+    AND([EdadMeses] >= 48, [EdadMeses] <= 59), "48-59 Meses (4 años)",
+    [EdadMeses] >= 60, "5 años o más",
+    TRUE, "Revisar Edad"
+)</code>
+                                            <br><em>¡Ajusta estos rangos y nombres de grupo según los que usa Servinfancia! <code class="code">IFS()</code> revisa condiciones en orden. La última condición <code class="code">TRUE, "Revisar Edad"</code> es por si algo no encaja.</em>
+                                        </li>
+                                        <li>También desmarca "Editable?".</li>
+                                    </ul>
+                                </li>
+                                <li><strong>FechaUltimaActualizacionGE</strong>: Tipo <code class="code">DateTime</code> (Fecha y Hora) o <code class="code">Date</code>.
+                                    <ul>
+                                        <li>Si quieres que se actualice cada vez que el Grupo Etario cambie, puedes usar una Acción (lo veremos después) o en la configuración de la columna <code class="code">GrupoEtarioActual</code>, en la sección "Behavior" (Comportamiento) o "Updates" (Actualizaciones), podrías configurar "Reset on edit?" para la columna <code class="code">FechaUltimaActualizacionGE</code> para que se actualice con <code class="code">NOW()</code> cuando <code class="code">GrupoEtarioActual</code> cambie. Esto es un poco más avanzado.
+                                        <br>Una forma más simple es que esta fecha se llene cuando se guarda el registro. En "Initial Value" o "App Formula" para <code class="code">FechaUltimaActualizacionGE</code>, podrías poner <code class="code">NOW()</code>, pero esto se actualizaría cada vez que se sincronice la fila. Una mejor manera es usar una Acción. Por ahora, la dejamos así y la llenaremos con una Acción más adelante o al guardar.
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><strong>Responsable</strong>: Tipo <code class="code">Email</code>.
+                                    <ul>
+                                        <li>En "Initial Value", puedes poner <code class="code">USEREMAIL()</code> para que se llene automáticamente con el email del usuario que está agregando o editando el registro.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Notas</strong>: Tipo <code class="code">LongText</code> (Texto Largo).</li>
+                            </ul>
+                        </li>
+                        <li>Revisa la columna "LABEL?" (¿Etiqueta?). Usualmente se marca para la columna que mejor describe la fila, como <code class="code">NombreCompleto</code>. Esto es lo que AppSheet mostrará en listas desplegables cuando se refiera a un niño.</li>
+                        <li>¡No olvides hacer clic en <code class="code">Done</code> (Hecho) después de editar cada columna y luego <code class="code">Save</code> (Guardar) los cambios generales de la app!</li>
+                    </ol>
+                </li>
+                <li><strong>Qué hace:</strong> Le dice a AppSheet qué tipo de datos contiene cada columna y cómo debe comportarse (ej. si es una llave, si se calcula sola, si es editable). Esto es fundamental para que la app funcione bien.</li>
+                <li><strong>Para qué sirve:</strong> Para que los formularios de entrada de datos pidan el tipo correcto de información (ej. un calendario para fechas), para que las fórmulas funcionen, y para que los datos se muestren correctamente.</li>
+                <li><strong>Verificación:</strong> En Data > Columns > Ninos, cada columna tiene el tipo correcto. Las columnas <code class="code">ID_Nino</code> tienen "KEY?" marcado. <code class="code">EdadMeses</code> y <code class="code">GrupoEtarioActual</code> tienen sus fórmulas y no son editables. <code class="code">NombreCompleto</code> podría estar marcado como "LABEL?".</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 2.5: Crear Vistas para Gestionar los Niños</strong>
+            <p>Necesitamos pantallas para ver la lista de niños y para agregar/editar niños.</p>
+            <ul>
+                <li><strong>Acción:</strong>
+                    <ol>
+                        <li>Ve a <code class="code">UX</code> > <code class="code">Views</code>.</li>
+                        <li>Haz clic en <code class="code">+ New View</code>.
+                            <ul>
+                                <li><strong>For this data</strong>: Selecciona <code class="code">Ninos</code>.</li>
+                                <li><strong>View name</strong>: Ponle <code class="code">Lista de Niños</code>.</li>
+                                <li><strong>View type</strong>: Elige <code class="code">Deck</code> (Mazo) o <code class="code">Table</code> (Tabla). "Deck" es bueno para una vista resumida en celulares.
+                                    <ul>
+                                        <li>Si eliges "Deck":
+                                            <li><strong>Primary header</strong>: Elige <code class="code">NombreCompleto</code>.</li>
+                                            <li><strong>Secondary header</strong>: Elige <code class="code">GrupoEtarioActual</code>.</li>
+                                            <li><strong>Summary column</strong>: Podrías poner <code class="code">EdadMeses</code>.</li>
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>Si eliges "Table":
+                                            <li><strong>Column order</strong>: Selecciona las columnas que quieres ver en la tabla principal (ej. <code class="code">NombreCompleto</code>, <code class="code">GrupoEtarioActual</code>, <code class="code">FechaNacimiento</code>).</li>
+                                            <li><strong>Sort by</strong>: Puedes ordenar por <code class="code">NombreCompleto</code>.</li>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><strong>Position (Posición)</strong>: Elige una posición en el menú (ej. "Left", "Center", "Right" si usas pestañas inferiores, o "menu" si usas un menú lateral).</li>
+                                <li>Guarda la vista.</li>
+                            </ul>
+                        </li>
+                        <li>AppSheet usualmente crea automáticamente vistas de "Detail" (Detalle) y "Form" (Formulario) para cada tabla. Revisa si existen:
+                            <ul>
+                                <li>Busca <code class="code">Ninos_Detail</code> y <code class="code">Ninos_Form</code>. Estos son nombres que AppSheet genera. Puedes renombrarlos si quieres (ej. "Detalle del Niño", "Formulario Niño").</li>
+                                <li><strong>Para <code class="code">Ninos_Form</code></strong>:
+                                    <ul>
+                                        <li>Ve a su configuración.</li>
+                                        <li><strong>Column order</strong>: Organiza el orden en que quieres que aparezcan los campos en el formulario para agregar/editar un niño. Pon primero <code class="code">NombreCompleto</code>, luego <code class="code">FechaNacimiento</code>, <code class="code">Notas</code>. Las columnas con fórmulas (<code class="code">ID_Nino</code> si usa UNIQUEID(), <code class="code">EdadMeses</code>, <code class="code">GrupoEtarioActual</code>) y <code class="code">Responsable</code> (si usa USEREMAIL()) no necesitan estar visibles en el formulario si se rellenan automáticamente y no son editables, o puedes ponerlas al final.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Para <code class="code">Ninos_Detail</code></strong>:
+                                    <ul>
+                                        <li>Configura el "Column order" para mostrar todos los datos importantes del niño de forma clara.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+                <li><strong>Qué hace:</strong> Crea las pantallas que los usuarios usarán para interactuar con los datos de los niños.</li>
+                <li><strong>Para qué sirve:</strong> La vista de lista ("Deck" o "Table") para ver a todos los niños. El formulario ("Form") para agregar nuevos niños o editar existentes. La vista de detalle ("Detail") para ver toda la información de un solo niño.</li>
+                <li><strong>Verificación:</strong>
+                    <ul>
+                        <li>Tienes una nueva vista llamada "Lista de Niños" en tu menú principal. Al hacer clic, muestra (o permitirá agregar) niños.</li>
+                        <li>Al hacer clic en el botón "+" (usualmente abajo a la derecha) en la vista "Lista de Niños", se abre el formulario "Ninos_Form" con los campos que definiste.</li>
+                        <li>Intenta agregar un niño de prueba: pon un nombre y una fecha de nacimiento. Al guardar, deberías ver que <code class="code">EdadMeses</code> y <code class="code">GrupoEtarioActual</code> se calculan solos. El <code class="code">ID_Nino</code> también debería rellenarse.</li>
+                        <li>Si haces clic en un niño de la lista, te lleva a la vista "Ninos_Detail".</li>
+                        <li>¡No olvides <code class="code">Save</code> (Guardar) en AppSheet!</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <strong>Paso 2.6: (Opcional por ahora, para más adelante) Crear una Acción para "Actualizar Grupo Etario"</strong>
+            <p>Aunque el Grupo Etario se calcula con una fórmula basada en la Edad en Meses (que a su vez se basa en la Fecha de Nacimiento y la fecha de HOY), la fórmula en la columna <code class="code">GrupoEtarioActual</code> se recalculará cada vez que los datos se sincronicen o se edite la fila, lo cual es bueno. Si necesitaras una actualización manual o más compleja (por ejemplo, si los criterios de grupo etario cambian y necesitas reprocesar todos los niños), podrías crear una acción.</p>
+            <p>Por ahora, con la fórmula en la columna, la actualización del grupo etario es bastante automática cuando la app se sincroniza y la edad en meses cambia debido al paso del tiempo (porque <code class="code">TODAY()</code> cambia). No necesitamos un botón explícito para "actualizar grupo etario" si la fórmula es robusta.</p>
+            <p>Lo que sí podríamos necesitar es una forma de registrar cuándo se "confirmó" o "revisó" un grupo etario. La columna <code class="code">FechaUltimaActualizacionGE</code> podría usarse para esto.</p>
+            <p><em>Vamos a dejar la acción explícita de "Actualizar Grupo Etario" pendiente, ya que la fórmula actual debería manejarlo dinámicamente. Nos enfocaremos en asegurar que los datos se ingresen y se calculen correctamente.</em></p>
+        </div>
+
+        <p>¡Genial! Ya tienes una sección para gestionar los niños y sus grupos etarios. La información se calcula automáticamente, lo cual es un gran avance respecto a las macros manuales. Recuerda probar bien añadiendo algunos niños con diferentes fechas de nacimiento.</p>
+        <p>En la siguiente etapa, nos meteremos con la programación de los pedidos.</p>
+
+        <h2>Etapa 3: ¡A Preparar los Pedidos! (Programación de Alistamiento)</h2>
+        <p><em>(Los pasos detallados para esta etapa seguirían el mismo formato: crear hoja "Pedidos" en Google Sheets, definir columnas como ID_Pedido, ID_Nino_Asociado, FechaPedido, EstadoPedido (ej. Pendiente, Alistado, En Ruta, Entregado), ItemsPedido, etc. Luego, añadirla a AppSheet, configurar columnas -usando LOOKUP para traer datos del niño-, crear vistas para listar pedidos, agregar/editar pedidos, y acciones para cambiar el estado del pedido).</em></p>
+        <p><strong>Ejemplo de columnas para la hoja "Pedidos":</strong>
+            <ul>
+                <li><code>ID_Pedido</code> (Key, Text, Initial Value: UNIQUEID())</li>
+                <li><code>ID_Nino_Asociado</code> (Ref a la tabla "Ninos". AppSheet creará una relación).</li>
+                <li><code>NombreNino</code> (Text, App Formula: <code>LOOKUP([ID_Nino_Asociado], "Ninos", "ID_Nino", "NombreCompleto")</code> - para mostrar el nombre directamente en la tabla de pedidos)</li>
+                <li><code>FechaPedido</code> (Date, Initial Value: TODAY())</li>
+                <li><code>TipoAlimento</code> (Enum o Text, ej: "Ración Mes A", "Ración Mes B")</li>
+                <li><code>Cantidad</code> (Number)</li>
+                <li><code>EstadoPedido</code> (Enum: "Pendiente de Alistar", "Alistado", "En Ruta", "Entregado", "Cancelado". Initial Value: "Pendiente de Alistar")</li>
+                <li><code>FechaAlistamiento</code> (DateTime, actualizable con una acción)</li>
+                <li><code>UsuarioAlisto</code> (Email, actualizable con una acción)</li>
+                <li><code>NotasPedido</code> (LongText)</li>
+            </ul>
+        </p>
+
+        <h2>Etapa 4: ¡Rutas en Marcha! (Despacho de Rutas)</h2>
+        <p><em>(Similarmente, crear hoja "Rutas" con columnas como ID_Ruta, FechaRuta, ConductorAsignado, Vehiculo, EstadoRuta (Programada, En Progreso, Completada). Luego, una hoja "DetalleRutaPedidos" para vincular qué pedidos van en qué ruta (esta sería una tabla de muchos a muchos, con ID_Detalle, ID_Ruta_Asociada, ID_Pedido_Asociado). Configurar tablas, vistas de mapa si hay direcciones, vistas para el conductor, acciones para iniciar y completar ruta, y para marcar pedidos individuales como entregados desde la ruta).</em></p>
+        <p><strong>Ejemplo de columnas para "Rutas":</strong>
+            <ul>
+                <li><code>ID_Ruta</code> (Key, Text, Initial Value: UNIQUEID())</li>
+                <li><code>NombreRuta</code> (Text, ej: "Ruta Martes Mañana - Zona Norte")</li>
+                <li><code>FechaProgramada</code> (Date)</li>
+                <li><code>Conductor</code> (Text o Ref a una tabla de "Usuarios/Conductores" si la creas)</li>
+                <li><code>Vehiculo</code> (Text)</li>
+                <li><code>EstadoRuta</code> (Enum: "Programada", "En Progreso", "Completada", "Cancelada")</li>
+                <li><code>HoraSalidaEstimada</code> (Time)</li>
+                <li><code>HoraSalidaReal</code> (DateTime, con acción)</li>
+                <li><code>HoraRegresoReal</code> (DateTime, con acción)</li>
+            </ul>
+        <strong>Ejemplo de columnas para "DetalleRutaPedidos" (para asignar pedidos a rutas):</strong>
+            <ul>
+                <li><code>ID_DetalleRuta</code> (Key, Text, Initial Value: UNIQUEID())</li>
+                <li><code>ID_Ruta_Asociada</code> (Ref a "Rutas")</li>
+                <li><code>ID_Pedido_Asociado</code> (Ref a "Pedidos")
+                    <ul><li>Podrías añadir una condición aquí para que solo se puedan añadir pedidos con estado "Alistado".</li></ul>
+                </li>
+                <li><code>OrdenEntregaEnRuta</code> (Number, para secuenciar las entregas dentro de la ruta)</li>
+                <li><code>EstadoEntrega</code> (Enum: "Pendiente en Ruta", "Entregado", "No Entregado", se actualiza desde la app del repartidor. Este podría incluso actualizar el <code>EstadoPedido</code> en la tabla Pedidos mediante una Acción.)</li>
+                <li><code>FechaHoraEntregaReal</code> (DateTime)</li>
+                <li><code>NotasEntrega</code> (LongText)</li>
+                <li><code>UbicacionEntrega</code> (LatLong, si quieres capturar la ubicación GPS en el momento de la entrega)</li>
+            </ul>
+        </p>
+
+        <h2>Etapa 5: ¡Poniéndola Bonita y Poderosa! (Mejoras y Extras)</h2>
+        <p><em>(Aquí incluirías pasos para:
+            <ul>
+                <li>Personalizar el tema y logo de la app (Branding).</li>
+                <li>Crear vistas de tipo "Chart" (Gráfico) para ver, por ejemplo, pedidos por estado o niños por grupo etario.</li>
+                <li>Crear vistas de "Dashboard" para combinar varias vistas en una sola pantalla.</li>
+                <li>Configurar "Format Rules" (Reglas de Formato) para cambiar colores o iconos según los datos (ej. pedidos pendientes en rojo).</li>
+                <li>Explorar "Actions" más avanzadas, como enviar notificaciones (Push Notifications) cuando un estado cambia.</li>
+                <li>Configurar "Offline" y "Sync" settings.</li>
+                <li>Definir "Security Filters" (Filtros de Seguridad) si diferentes usuarios solo deben ver ciertos datos (ej. un conductor solo ve sus rutas).</li>
+                <li>Si es necesario, configurar "User Roles" (Roles de Usuario) para permisos más granulares.</li>
+            </ul>
+        )</em></p>
+
+        <p>¡Recuerda que este es un proyecto que irás construyendo poco a poco! Lo más importante es empezar, probar y no tener miedo de experimentar. AppSheet es muy flexible.</p>
+        <p>Consulta la <a href="https://support.google.com/appsheet" target="_blank">documentación oficial de AppSheet</a> siempre que tengas dudas, ¡es tu mejor amiga en este viaje!</p>
+        <p>¡Mucho éxito con tu app para Servinfancia SAS!</p>
+
+    </div>
 </body>
 </html>
